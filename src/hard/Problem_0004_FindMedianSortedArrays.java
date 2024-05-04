@@ -37,4 +37,36 @@ public class Problem_0004_FindMedianSortedArrays {
             return getKth(nums1, start1, end1, nums2, j + 1, end2, k - Math.min(len2, k / 2));
         }
     }
+
+
+    // 其他解法
+    public double findMedianSortedArraysII(int[] nums1, int[] nums2) {
+        int s = nums1.length, l = nums2.length;
+        if (s > l) return findMedianSortedArraysII(nums2, nums1);
+
+        int k = (s + l + 1) >> 1;
+        int left = 0, right = s;
+        int m1, m2;
+        while (left < right) {
+            m1 = left + ((right - left) >> 1);
+            m2 = k - m1;
+
+            if (nums1[m1] < nums2[m2]) {
+                left = m1 + 1;
+            } else {
+                right = m1;
+            }
+        }
+
+        m1 = left;
+        m2 = k - m1;
+
+        int leftMax1 = m1 == 0 ? Integer.MIN_VALUE : nums1[m1 - 1];
+        int rightMin1 = m1 == s ? Integer.MAX_VALUE : nums1[m1];
+        int leftMax2 = m2 == 0 ? Integer.MIN_VALUE : nums2[m2 - 1];
+        int rightMin2 = m2 == l ? Integer.MAX_VALUE : nums2[m2];
+
+        if ((s + l) % 2 == 1) return Math.max(leftMax1, leftMax2);
+        return (Math.max(leftMax1, leftMax2) + Math.min(rightMin1, rightMin2)) / 2.0d;
+    }
 }
